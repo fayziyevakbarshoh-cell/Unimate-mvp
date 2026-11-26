@@ -8,7 +8,8 @@ from aiogram.filters import CommandStart
 from aiogram.types import ReplyKeyboardMarkup, KeyboardButton, WebAppInfo, InlineKeyboardMarkup, InlineKeyboardButton
 
 # ================= SOZLAMALAR =================
-BOT_TOKEN = " 9298309021:AAE31Ke4zpdNPE2zL_PsQl5XcuTdfquit1M"
+BOT_TOKEN = "9298309021:AAE31Ke4zpdNPE2zL_PsQl5XcuTdfquit1M"
+"
 WEBAPP_URL = "https://vercel.app" 
 ADMIN_ID = 123456789  # O'zingizning Telegram ID raqamingiz
 # ==============================================
