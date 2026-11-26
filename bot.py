@@ -167,9 +167,9 @@ async def finish_lesson(callback: types.CallbackQuery):
         "Mablag' mentorga o'tkazildi va sizga <b>+10 UniCoin</b> bonus berildi! Rahmat!",
         parse_mode="HTML"
     )
+async def serve_webapp(request):
+    return web.FileResponse("index.html")
 
-async def health_check(request):
-    return web.Response(text="UniMate Bot ishlamoqda!")
 
 async def main():
     init_db()
