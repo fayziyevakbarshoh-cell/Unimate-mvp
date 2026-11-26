@@ -9,7 +9,7 @@ from aiogram.filters import CommandStart
 from aiogram.types import ReplyKeyboardMarkup, KeyboardButton, WebAppInfo, InlineKeyboardMarkup, InlineKeyboardButton
 
 BOT_TOKEN = "9298309021:AAE31Ke4zpdNPE2zL_PsQl5XcuTdfquit1M"
-WEBAPP_URL = "https://vercel.app"
+WEBAPP_URL = "https://unimate-2026-one.vercel.app"
 ADMIN_ID = 123456789
 
 logging.basicConfig(level=logging.INFO)
