@@ -9,7 +9,7 @@ from aiogram.filters import CommandStart
 from aiogram.types import ReplyKeyboardMarkup, KeyboardButton, WebAppInfo, InlineKeyboardMarkup, InlineKeyboardButton
 
 BOT_TOKEN = "9298309021:AAE31Ke4zpdNPE2zL_PsQl5XcuTdfquit1M"
-WEBAPP_URL = "https://unimate-mvp.onrender.com"
+WEBAPP_URL = "https://SIZNING_RENDER_://onrender.com"
 ADMIN_ID = 123456789
 
 logging.basicConfig(level=logging.INFO)
@@ -55,7 +55,7 @@ async def cmd_start(message: types.Message):
     welcome_text = (
         f"👋 Salom, <b>{message.from_user.full_name}</b>!\n\n"
         "<b>UniMate</b> — Millat Umidi universiteti talabalari uchun bilim almashish va tezkor akademik yordam platformasiga xush kelibsiz!\n\n"
-        "👇 Platformaga kirish uchun pastdagi tugmani bosing:"
+        "👇 Platformaga kirish uchun pastdagi ko'k tugmani bosing:"
     )
     await message.answer(welcome_text, reply_markup=kb, parse_mode="HTML")
 
@@ -167,14 +167,14 @@ async def finish_lesson(callback: types.CallbackQuery):
         "Mablag' mentorga o'tkazildi va sizga <b>+10 UniCoin</b> bonus berildi! Rahmat!",
         parse_mode="HTML"
     )
+
 async def serve_webapp(request):
     return web.FileResponse("index.html")
-
 
 async def main():
     init_db()
     app = web.Application()
-    app.router.add_get("/", health_check)
+    app.router.add_get("/", serve_webapp)
     runner = web.AppRunner(app)
     await runner.setup()
     port = int(os.environ.get("PORT", 8080))
