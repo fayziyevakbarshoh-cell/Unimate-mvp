@@ -1,18 +1,16 @@
 import asyncio
 import json
 import logging
+import os
 import sqlite3
 from aiohttp import web
 from aiogram import Bot, Dispatcher, types, F
 from aiogram.filters import CommandStart
 from aiogram.types import ReplyKeyboardMarkup, KeyboardButton, WebAppInfo, InlineKeyboardMarkup, InlineKeyboardButton
 
-# ================= SOZLAMALAR =================
 BOT_TOKEN = "9298309021:AAE31Ke4zpdNPE2zL_PsQl5XcuTdfquit1M"
-"
-WEBAPP_URL = "https://vercel.app" 
-ADMIN_ID = 123456789  # O'zingizning Telegram ID raqamingiz
-# ==============================================
+WEBAPP_URL = "https://vercel.app"
+ADMIN_ID = 123456789
 
 logging.basicConfig(level=logging.INFO)
 bot = Bot(token=BOT_TOKEN)
@@ -133,7 +131,7 @@ async def handle_webapp_data(message: types.Message):
 
 @dp.callback_query(F.data.startswith("pay_"))
 async def process_payment(callback: types.CallbackQuery):
-    order_id = callback.data.split("_")[1]
+    order_id = callback.data.split("_")
     
     conn = sqlite3.connect("unimate.db")
     cur = conn.cursor()
@@ -156,7 +154,7 @@ async def process_payment(callback: types.CallbackQuery):
 
 @dp.callback_query(F.data.startswith("done_"))
 async def finish_lesson(callback: types.CallbackQuery):
-    order_id = callback.data.split("_")[1]
+    order_id = callback.data.split("_")
     
     conn = sqlite3.connect("unimate.db")
     cur = conn.cursor()
@@ -170,18 +168,20 @@ async def finish_lesson(callback: types.CallbackQuery):
         parse_mode="HTML"
     )
 
-async def serve_webapp(request):
-    return web.FileResponse("index.html")
+async def health_check(request):
+    return web.Response(text="UniMate Bot ishlamoqda!")
 
 async def main():
     init_db()
     app = web.Application()
-    app.router.add_get("/", serve_webapp)
+    app.router.add_get("/", health_check)
     runner = web.AppRunner(app)
     await runner.setup()
-    site = web.TCPSite(runner, "0.0.0.0", 8080)
+    port = int(os.environ.get("PORT", 8080))
+    site = web.TCPSite(runner, "0.0.0.0", port)
     await site.start()
-    print("Mini-App server 8080-portda ishga tushdi...")
+    print(f"Server {port}-portda ishga tushdi...")
+    await bot.delete_webhook(drop_pending_updates=True)
     await dp.start_polling(bot)
 
 if __name__ == "__main__":
