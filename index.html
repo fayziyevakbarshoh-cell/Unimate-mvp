@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UniMate — Talabalar Platformasi</title>
+    <script src="https://telegram.org"></script>
+    <style>
+        :root {
+            --bg-color: var(--tg-theme-bg-color, #f4f6f9);
+            --text-color: var(--tg-theme-text-color, #1c1c1e);
+            --card-bg: var(--tg-theme-secondary-bg-color, #ffffff);
+            --primary: #4f46e5;
+            --accent: #10b981;
+            --danger: #ef4444;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 16px;
+            padding-bottom: 80px;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .badge {
+            background: #eef2ff;
+            color: var(--primary);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 13px;
+        }
+        .tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 16px;
+            overflow-x: auto;
+        }
+        .tab {
+            padding: 10px 16px;
+            border-radius: 12px;
+            background: var(--card-bg);
+            border: 1px solid #e5e7eb;
+            cursor: pointer;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+        .tab.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+        .card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 16px;
+            margin-bottom: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        .mentor-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+        .mentor-name {
+            font-size: 17px;
+            font-weight: 700;
+            margin: 0 0 4px 0;
+        }
+        .subject-tag {
+            display: inline-block;
+            background: #dcfce7;
+            color: #166534;
+            padding: 4px 10px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+        .price {
+            font-size: 16px;
+            font-weight: 800;
+            color: var(--primary);
+        }
+        .btn {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 12px;
+            background: var(--primary);
+            color: white;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        .btn-sos {
+            background: var(--danger);
+            margin-bottom: 16px;
+        }
+        input, select, textarea {
+            width: 100%;
+            padding: 12px;
+            margin: 8px 0 14px 0;
+            border-radius: 10px;
+            border: 1px solid #d1d5db;
+            box-sizing: border-box;
+            font-size: 14px;
+        }
+        .hidden { display: none; }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <div>
+            <h2 style="margin:0;">UniMate 🎓</h2>
+            <small style="color:gray;">Millat Umidi University</small>
+        </div>
+        <div class="badge">🪙 50 UniCoin</div>
+    </div>
+
+    <button class="btn btn-sos" onclick="triggerSOS()">🚨 SOS: 2 soat ichida tezkor yordam</button>
+
+    <div class="tabs">
+        <div class="tab active" onclick="switchTab('find', this)">🔍 Mentor topish</div>
+        <div class="tab" onclick="switchTab('become', this)">👨‍🏫 Mentor bo'lish</div>
+        <div class="tab" onclick="switchTab('notes', this)">📚 Konspektlar</div>
+    </div>
+
+    <!-- 1. MENTOR TOPISH BO'LIMI -->
+    <div id="tab-find">
+        <div id="mentors-list"></div>
+    </div>
+
+    <!-- 2. MENTOR BO'LISH BO'LIMI -->
+    <div id="tab-become" class="hidden">
+        <div class="card">
+            <h3 style="margin-top:0;">Bilimingizni daromadga aylantiring</h3>
+            <label>Ism va familiyangiz</label>
+            <input type="text" id="m-name" placeholder="Masalan: Sardor Karimov">
+            
+            <label>Yo'nalish / Fan</label>
+            <select id="m-subject">
+                <option value="Assignment & Coursework">Assignment & Coursework Help</option>
+                <option value="IELTS / Academic English">IELTS / Academic English</option>
+                <option value="IT & Dasturlash">IT & Dasturlash (Python, Web)</option>
+                <option value="Iqtisodiyot va Moliya">Iqtisodiyot va Moliya</option>
+            </select>
+
+            <label>1 soatlik dars narxi (so'm)</label>
+            <input type="number" id="m-price" value="40000" min="15000" step="5000">
+
+            <label>Tajribangiz va GPA ko'rsatkichi</label>
+            <textarea id="m-desc" rows="3" placeholder="Masalan: 3-kurs, GPA 3.8. BTEC Assignmentlarni A darajada yozishga yordam beraman."></textarea>
+
+            <button class="btn" onclick="registerMentor()">Anketani joylash</button>
+        </div>
+    </div>
+
+    <!-- 3. KONSPEKTLAR BOZORI -->
+    <div id="tab-notes" class="hidden">
+        <div class="card">
+            <span class="subject-tag">Business Law • PDF</span>
+            <h4 style="margin:4px 0;">BTEC Business Law — Tayyor Assignment shabloni</h4>
+            <p style="font-size:13px; color:gray;">Muallif: Madina A. (4-kurs) • ⭐ 4.9</p>
+            <div class="price">20 000 so'm</div>
+            <button class="btn" onclick="bookLesson('Business Law Konspekt', 20000)">Sotib olish</button>
+        </div>
+        <div class="card">
+            <span class="subject-tag">Academic English • DOCX</span>
+            <h4 style="margin:4px 0;">Esse yozish uchun 50 ta akademik ibora va struktura</h4>
+            <p style="font-size:13px; color:gray;">Muallif: Jasur T. (IELTS 8.0) • ⭐ 5.0</p>
+            <div class="price">15 000 so'm</div>
+            <button class="btn" onclick="bookLesson('Academic English Konspekt', 15000)">Sotib olish</button>
+        </div>
+    </div>
+
+    <script>
+        const tg = window.Telegram.WebApp;
+        tg.expand();
+
+        const defaultMentors = [
+            { name: "Azizbek Rahimov", subject: "Assignment & Coursework", price: 45000, rating: "4.9", desc: "3-kurs Biznes fakulteti. Pearson BTEC topshiriqlarini tahlil qilish va strukturani tuzish." },
+            { name: "Nilufar Qodirova", subject: "IELTS / Academic English", price: 40000, rating: "5.0", desc: "IELTS 7.5. Academic Writing va taqdimotlarga (Presentation) tayyorlayman." },
+            { name: "Bekzod Toshmatov", subject: "IT & Dasturlash", price: 50000, rating: "4.8", desc: "Python, SQL va veb-dasturlash fanlaridan amaliy yordam beraman." }
+        ];
+
+        function renderMentors() {
+            const list = document.getElementById('mentors-list');
+            list.innerHTML = '';
+            defaultMentors.forEach(m => {
+                list.innerHTML += `
+                    <div class="card">
+                        <div class="mentor-header">
+                            <div>
+                                <span class="subject-tag">${m.subject}</span>
+                                <h3 class="mentor-name">${m.name} ⭐ ${m.rating}</h3>
+                            </div>
+                            <div class="price">${m.price.toLocaleString()} so'm</div>
+                        </div>
+                        <p style="font-size:13px; color:#4b5563; margin:6px 0;">${m.desc}</p>
+                        <button class="btn" onclick="bookLesson('${m.name} (${m.subject})', ${m.price})">Darsni band qilish</button>
+                    </div>
+                `;
+            });
+        }
+
+        function switchTab(tabName, el) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            el.classList.add('active');
+            ['find', 'become', 'notes'].forEach(id => {
+                document.getElementById('tab-' + id).classList.add('hidden');
+            });
+            document.getElementById('tab-' + tabName).classList.remove('hidden');
+        }
+
+        function bookLesson(title, price) {
+            const data = JSON.stringify({
+                action: "book",
+                title: title,
+                price: price
+            });
+            tg.sendData(data);
+        }
+
+        function registerMentor() {
+            const name = document.getElementById('m-name').value;
+            const subject = document.getElementById('m-subject').value;
+            const price = document.getElementById('m-price').value;
+            const desc = document.getElementById('m-desc').value;
+
+            if (!name || !desc) {
+                tg.showAlert("Iltimos, barcha maydonlarni to'ldiring!");
+                return;
+            }
+
+            const data = JSON.stringify({
+                action: "new_mentor",
+                name: name,
+                subject: subject,
+                price: price,
+                desc: desc
+            });
+            tg.sendData(data);
+        }
+
+        function triggerSOS() {
+            const data = JSON.stringify({
+                action: "sos",
+                price: 55000
+            });
+            tg.sendData(data);
+        }
+
+        renderMentors();
+    </script>
+</body>
+</html>
