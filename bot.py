@@ -8,8 +8,8 @@ from aiogram import Bot, Dispatcher, types, F
 from aiogram.filters import CommandStart
 from aiogram.types import ReplyKeyboardMarkup, KeyboardButton, WebAppInfo, InlineKeyboardMarkup, InlineKeyboardButton
 
-BOT_TOKEN = "8284724833:AAFec_rgUsnaXszd4giZipwGK2-8cB0pGzc"
-WEBAPP_URL = "https://SIZNING_RENDER_://onrender.com"
+BOT_TOKEN = os.environ.get("BOT_TOKEN", "8284724833:AAFec_rgUsnaXszd4giZipwGK2-8cB0pGzc")
+WEBAPP_URL = os.environ.get("WEBAPP_URL", "https://onrender.com")
 ADMIN_ID = 123456789
 
 logging.basicConfig(level=logging.INFO)
